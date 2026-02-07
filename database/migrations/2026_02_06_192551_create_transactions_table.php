@@ -14,9 +14,10 @@ return new class extends Migration
     Schema::create('transactions', function (Blueprint $table) {
         $table->id();
         $table->foreignId('account_id')->constrained()->cascadeOnDelete();
-        $table->enum('type',['debit', 'credit']);
-        $table->decimal('debit', 15, 2);
+        $table->date('date');
         $table->string('description')->nullable();
+        $table->decimal('debit', 15, 2)->default(0);
+        $table->decimal('credit', 15, 2)->default(0);
         $table->timestamps();
     });
 }
