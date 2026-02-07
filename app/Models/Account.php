@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    //
+    protected $fillable = [
+    'code',
+    'name',
+    'type',
+    'balance',
+    'parent_id',
+    'is_active',
+];
 }

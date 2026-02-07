@@ -1,82 +1,83 @@
+import React from 'react';
 import { useForm } from '@inertiajs/react';
 
 export default function Index({ accounts, transactions }) {
-  const { data, setData, post, reset, errors } = useForm({
-  account_id: '',
-  date: '',
-  description: '',
-  debit: '',
-  credit: '',
-});
-
-
-  function submit(e) {
-    e.preventDefault();
-    post(route('transactions.store'), {
-      onSuccess: () => reset(),
+    const { data, setData, post, errors, reset } = useForm({
+        account_id: '',
+        type: 'debit',
+        amount: '',
+        description: '',
     });
-  }
 
-  return (
-    <div style={{ padding: 24 }}>
-      <h1>Transactions</h1>
+    const submit = (e) => {
+        e.preventDefault();
+        post(route('transactions.store'), {
+            onSuccess: () => reset(),
+        });
+    };
 
-    
-    {errors.amount && (
-      <div style={{ color: 'red', marginBottom: 12 }}>
-        {errors.amount}
-      </div>
-    )}
+    return (
+        <div style={{ padding: 20 }}>
+            <h1>Transactions</h1>
 
-      <form onSubmit={submit}>
-        <select
-          value={data.account_id}
-          onChange={e => setData('account_id', e.target.value)}
-        >
-          <option value="">Select Account</option>
-          {accounts.map(acc => (
-            <option key={acc.id} value={acc.id}>
-              {acc.code} - {acc.name}
-            </option>
-          ))}
-        </select>
+            <form onSubmit={submit}>
+                <div>
+                    <select
+                        value={data.account_id}
+                        onChange={e => setData('account_id', e.target.value)}
+                    >
+                        <option value="">-- Select Account --</option>
+                        {accounts.map(account => (
+                            <option key={account.id} value={account.id}>
+                                {account.code} - {account.name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.account_id && <div style={{ color: 'red' }}>{errors.account_id}</div>}
+                </div>
 
-        <input
-          type="date"
-          value={data.date}
-          onChange={e => setData('date', e.target.value)}
-        />
+                <div>
+                    <select
+                        value={data.type}
+                        onChange={e => setData('type', e.target.value)}
+                    >
+                        <option value="debit">Debit</option>
+                        <option value="credit">Credit</option>
+                    </select>
+                </div>
 
-        <input
-          placeholder="Description"
-          value={data.description}
-          onChange={e => setData('description', e.target.value)}
-        />
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Amount"
+                        value={data.amount}
+                        onChange={e => setData('amount', e.target.value)}
+                    />
+                    {errors.amount && <div style={{ color: 'red' }}>{errors.amount}</div>}
+                </div>
 
-        <input
-          placeholder="Debit"
-          value={data.debit}
-          onChange={e => setData('debit', e.target.value)}
-        />
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Description"
+                        value={data.description}
+                        onChange={e => setData('description', e.target.value)}
+                    />
+                </div>
 
-        <input
-          placeholder="Credit"
-          value={data.credit}
-          onChange={e => setData('credit', e.target.value)}
-        />
+                <button type="submit">Save</button>
+            </form>
 
-        <button type="submit">Add Transaction</button>
-      </form>
+            <hr />
 
-      <hr />
-
-      <ul>
-        {transactions.map(tx => (
-          <li key={tx.id}>
-            {tx.date} | {tx.account?.name} | D:{tx.debit} C:{tx.credit}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+            <h3>Transaction History</h3>
+            <ul>
+                {transactions.map(tx => (
+                    <li key={tx.id}>
+                        {tx.account?.name} | {tx.type} | {tx.amount}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }

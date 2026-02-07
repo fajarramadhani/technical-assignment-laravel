@@ -1,50 +1,82 @@
+import React from 'react';
 import { useForm } from '@inertiajs/react';
 
 export default function Index({ accounts }) {
-  const { data, setData, post, reset } = useForm({
-    name: '',
-    type: 'asset',
-  });
-
-  function submit(e) {
-    e.preventDefault();
-    post(route('accounts.store'), {
-      onSuccess: () => reset(),
+    const { data, setData, post, errors, reset } = useForm({
+        code: '',
+        name: '',
+        type: 'asset',
+        balance: '',
     });
-  }
 
-  return (
-    <div style={{ padding: 24 }}>
-      <h1>Chart of Accounts</h1>
+    const submit = (e) => {
+        e.preventDefault();
+        post(route('accounts.store'), {
+            onSuccess: () => reset(),
+        });
+    };
 
-      <form onSubmit={submit}>
-        <input
-          placeholder="Account name"
-          value={data.name}
-          onChange={e => setData('name', e.target.value)}
-        />
+    return (
+        <div style={{ padding: 20 }}>
+            <h1>Chart of Accounts</h1>
 
-        <select
-          value={data.type}
-          onChange={e => setData('type', e.target.value)}
-        >
-          <option value="asset">Asset</option>
-          <option value="liability">Liability</option>
-          <option value="equity">Equity</option>
-          <option value="revenue">Revenue</option>
-          <option value="expense">Expense</option>
-        </select>
+            <form onSubmit={submit}>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Account Code"
+                        value={data.code}
+                        onChange={e => setData('code', e.target.value)}
+                    />
+                    {errors.code && <div style={{ color: 'red' }}>{errors.code}</div>}
+                </div>
 
-        <button type="submit">Add Account</button>
-      </form>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Account Name"
+                        value={data.name}
+                        onChange={e => setData('name', e.target.value)}
+                    />
+                    {errors.name && <div style={{ color: 'red' }}>{errors.name}</div>}
+                </div>
 
-      <ul>
-        {accounts.map(acc => (
-          <li key={acc.id}>
-            {acc.code} - {acc.name}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+                <div>
+                    <select
+                        value={data.type}
+                        onChange={e => setData('type', e.target.value)}
+                    >
+                        <option value="asset">Asset</option>
+                        <option value="liability">Liability</option>
+                        <option value="equity">Equity</option>
+                        <option value="revenue">Revenue</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                    {errors.type && <div style={{ color: 'red' }}>{errors.type}</div>}
+                </div>
+
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Balance"
+                        value={data.balance}
+                        onChange={e => setData('balance', e.target.value)}
+                    />
+                    {errors.balance && <div style={{ color: 'red' }}>{errors.balance}</div>}
+                </div>
+
+                <button type="submit">Save</button>
+            </form>
+
+            <hr />
+
+            <ul>
+                {accounts.map(account => (
+                    <li key={account.id}>
+                        {account.code} - {account.name} ({account.type}) - {account.balance}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }

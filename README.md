@@ -1,45 +1,58 @@
 # Technical Assignment – Full Stack Developer
 
 ## 📌 Overview
-Aplikasi web sederhana untuk mengelola Accounts dan Transactions menggunakan:
-- Laravel 10
+Aplikasi web sederhana untuk mengelola **Chart of Accounts** dan **Transactions**.
+Aplikasi ini dibuat sebagai technical assignment dengan fokus pada struktur code,
+relasi data, dan business logic sederhana di sisi backend dan frontend.
+
+Tech utama yang digunakan:
+- Laravel
 - Inertia.js
 - React
 - MySQL
+- Docker
 - Laravel Breeze (Authentication)
 
+---
+
 ## 🛠 Tech Stack
-- Backend: Laravel 10
+- Backend: Laravel
 - Frontend: React + Inertia.js
 - Database: MySQL
-- Auth: Laravel Breeze
+- Authentication: Laravel Breeze
+- Containerization: Docker & Docker Compose
 - Styling: Tailwind CSS
+- Build Tool: Vite
 
-## ⚙️ Installation & Setup
+---
+
+## ⚙️ Installation & Setup (Docker)
 
 ### 1. Clone Repository
-git clone https://github.com/username/repository-name.git  
+```bash
+git clone https://github.com/username/repository-name.git
 cd repository-name
 
-### 2. Install Dependencies
-composer install  
-npm install
+### 2.⁠ ⁠Environment Setup
+cp .env.example .env
+### Sesuaikan konfigurasi database di file .env agar sesuai dengan docker-compose.yml.
 
-### 3. Environment Setup
-cp .env.example .env  
-php artisan key:generate  
+### 3.⁠ ⁠Build & Run Docker Containers
+docker compose up -d --build  
 
-Sesuaikan konfigurasi database di file `.env`
+### 4. Install Dependencies (Jika diperlukan)
+docker compose exec app composer install
+docker compose exec app npm install
+docker compose exec app npm run build
 
-### 4. Database Migration
-php artisan migrate
+### 5. Generate Application Key
+docker compose exec app php artisan key:generate
 
-### 5. Run Application
-php artisan serve  
-npm run dev
+### 6. Run Database Migration
+docker compose exec app php artisan migrate
 
 Akses aplikasi di:  
-http://127.0.0.1:8000
+https://localhost:8000
 
 ## 🔐 Authentication
 - Login & Register menggunakan Laravel Breeze
@@ -48,28 +61,77 @@ http://127.0.0.1:8000
 ## 📂 Features
 
 ### Accounts
-- Menampilkan daftar akun
-- Menambahkan akun baru
+- Menampilkan daftar akun (Chart of Accounts)
+- Menambahkan akun baru (code, name, type, balance)
 - Validasi input
+- Data tersimpan di database
 
 ### Transactions
 - Menampilkan daftar transaksi
-- Relasi dengan account
-- Validasi input
-- Error handling ditampilkan di UI
+- Relasi transaksi dengan account
+- Mendukung transaksi Debit dan Credit
+- Saldo account otomatis ter-update
+- Validasi input dan error handling ditampilkan di UI
 
 ## 🧪 Testing
-- Manual testing via browser
-- Validasi error ditampilkan jika input tidak sesuai
+
+🧪 How to Test the Application
+1. Authentication
+ - Register user baru
+ - Login menggunakan akun yang telah dibuat
+
+2. Create Account
+ - Masuk ke halaman Accounts
+ - Isi form:
+    Account Code (contoh: 1001)
+    Account Name (contoh: Cash)
+    Account Type (Asset, Liability, Equity, Revenue, Expense)
+    Opening Balance
+
+ - Klik Save
+ - Account akan muncul di list
+
+3. Create Transaction
+- Masuk ke halaman Transactions
+- Pilih account
+- Pilih jenis transaksi:
+    -  Debit → menambah saldo
+    - Credit → mengurangi saldo
+- Masukkan amount dan deskripsi
+- Klik Save
+
+4. Verify Balance
+- Kembali ke halaman Accounts
+- Pastikan saldo account sudah berubah sesuai transaksi
 
 ## 📁 Folder Structure (Important)
-- app/Models
-- app/Http/Controllers
-- routes/web.php
-- resources/js/Pages
+app/
+ ├── Models/
+ │    ├── Account.php
+ │    └── Transaction.php
+ ├── Http/Controllers/
+ │    ├── AccountController.php
+ │    └── TransactionController.php
+
+database/
+ └── migrations/
+
+routes/
+ └── web.php
+
+resources/js/Pages/
+ ├── Accounts/
+ └── Transactions/
+
+
+## 📌 Notes
+- File .env tidak di-commit ke repository
+- Aplikasi dijalankan menggunakan Docker
+- Fokus utama project ini adalah implementasi logic dan struktur aplikasi
+
 
 ## 👤 Author
-Nama: Fajar Ramadhani  
+Nama: Muhammad Fajar Ramadhani  
 Position: Full Stack Developer Candidate
 
 

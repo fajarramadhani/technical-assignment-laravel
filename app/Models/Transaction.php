@@ -11,10 +11,9 @@ class Transaction extends Model
 
     protected $fillable = [
         'account_id',
-        'date',
+        'type',
+        'amount',
         'description',
-        'debit',
-        'credit',
     ];
 
     // Relasi: Transaction milik satu Account

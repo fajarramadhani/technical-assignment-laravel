@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
 use App\Models\Account;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,41 +12,32 @@ class TransactionController extends Controller
     public function index()
     {
         return Inertia::render('Transactions/Index', [
-            'accounts' => Account::orderBy('code')->get(),
-            'transactions' => Transaction::with('account')
-                ->orderBy('date')
-                ->get(),
+            'accounts' => Account::where('is_active', true)->get(),
+            'transactions' => Transaction::with('account')->latest()->get(),
         ]);
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'account_id'  => 'required|exists:accounts,id',
-        'date'        => 'required|date',
-        'description' => 'nullable|string',
-        'debit'       => 'nullable|numeric|min:0',
-        'credit'      => 'nullable|numeric|min:0',
-    ]);
-
-    // ❗ Accounting rule validation
-    if (
-        (empty($validated['debit']) && empty($validated['credit'])) ||
-        (!empty($validated['debit']) && !empty($validated['credit']))
-    ) {
-        return back()->withErrors([
-            'amount' => 'Either debit or credit must be filled (not both).',
+    {
+        $validated = $request->validate([
+            'account_id' => 'required|exists:accounts,id',
+            'type' => 'required|in:debit,credit',
+            'amount' => 'required|numeric|min:1',
+            'description' => 'nullable|string',
         ]);
+
+        $account = Account::findOrFail($validated['account_id']);
+
+        if ($validated['type'] === 'debit') {
+            $account->balance += $validated['amount'];
+        } else {
+            $account->balance -= $validated['amount'];
+        }
+
+        $account->save();
+
+        Transaction::create($validated);
+
+        return redirect()->back();
     }
-
-    Transaction::create([
-        'account_id'  => $validated['account_id'],
-        'date'        => $validated['date'],
-        'description' => $validated['description'],
-        'debit'       => $validated['debit'] ?? 0,
-        'credit'      => $validated['credit'] ?? 0,
-    ]);
-
-    return redirect()->back();
-}
 }

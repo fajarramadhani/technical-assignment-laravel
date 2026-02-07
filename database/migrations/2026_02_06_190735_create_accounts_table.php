@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->decimal('balance', 15, 2)->default(0);
             $table->string('name');
             $table->enum('type', [
                 'asset',
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->foreignId('parent_id')
                   ->nullable()
                   ->constrained('accounts')
-                  ->null0nDelete();
+                  ->nullOnDelete();
             $table->boolean('is_active')->default(true); 
             $table->timestamps();
         });
