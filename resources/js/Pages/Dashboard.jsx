@@ -1,135 +1,70 @@
-import { Link, router } from '@inertiajs/react';
+import { Head, Link } from "@inertiajs/react";
 
 export default function Dashboard({ auth }) {
-  function logout() {
-    router.post(route('logout'));
-  }
+    return (
+        <>
+            <Head title="Dashboard" />
 
-  return (
-    <div
-      style={{
-        padding: 24,
-        maxWidth: 1100,
-        margin: '0 auto',
-        fontFamily: 'Arial, sans-serif',
-      }}
-    >
-      {/* HEADER + LOGOUT */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 32,
-        }}
-      >
-        <div>
-          <h1 style={{ marginBottom: 4 }}>Dashboard</h1>
-          <p style={{ color: '#555' }}>
-            Welcome back{auth?.user ? `, ${auth.user.name}` : ''} 👋
-          </p>
-        </div>
+            <div className="min-h-screen bg-gray-100 p-6">
+                <div className="max-w-5xl mx-auto space-y-6">
 
-        <button
-          onClick={logout}
-          style={{
-            padding: '8px 14px',
-            background: '#c0392b',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-          }}
-        >
-          Logout
-        </button>
-      </div>
+                    {/* Header */}
+                    <div className="bg-white p-6 rounded-lg shadow flex justify-between items-center">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-800">
+                                Dashboard
+                            </h1>
+                            <p className="text-gray-500 mt-1">
+                                Welcome, {auth?.user?.name}
+                            </p>
+                        </div>
 
-      {/* MAIN NAVIGATION CARDS */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: 16,
-          marginBottom: 32,
-        }}
-      >
-        {/* ACCOUNTS */}
-        <div
-          style={{
-            border: '1px solid #ddd',
-            borderRadius: 6,
-            padding: 16,
-            background: '#fafafa',
-          }}
-        >
-          <h3 style={{ marginBottom: 8 }}>Chart of Accounts</h3>
-          <p style={{ color: '#555', marginBottom: 12 }}>
-            Manage account structure and balances
-          </p>
-          <Link href={route('accounts.index')}>
-            <button
-              style={{
-                padding: '8px 14px',
-                background: '#3498db',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-              }}
-            >
-              Go to Accounts
-            </button>
-          </Link>
-        </div>
+                        {/* Logout Button */}
+                        <Link
+                            href={route("logout")}
+                            method="post"
+                            as="button"
+                            className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600 transition"
+                        >
+                            Logout
+                        </Link>
+                    </div>
 
-        {/* TRANSACTIONS */}
-        <div
-          style={{
-            border: '1px solid #ddd',
-            borderRadius: 6,
-            padding: 16,
-            background: '#fafafa',
-          }}
-        >
-          <h3 style={{ marginBottom: 8 }}>Transactions</h3>
-          <p style={{ color: '#555', marginBottom: 12 }}>
-            Record and review financial transactions
-          </p>
-          <Link href={route('transactions.index')}>
-            <button
-              style={{
-                padding: '8px 14px',
-                background: '#2ecc71',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-              }}
-            >
-              Go to Transactions
-            </button>
-          </Link>
-        </div>
-      </div>
+                    {/* Menu Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white p-6 rounded-lg shadow">
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                Chart of Accounts
+                            </h2>
+                            <p className="text-sm text-gray-500 mt-2">
+                                Manage your financial accounts
+                            </p>
+                            <Link
+                                href="/accounts"
+                                className="inline-block mt-4 text-sm font-medium text-indigo-600 hover:underline"
+                            >
+                                Open Accounts →
+                            </Link>
+                        </div>
 
-      {/* INFO SECTION */}
-      <div
-        style={{
-          border: '1px solid #ddd',
-          borderRadius: 6,
-          padding: 16,
-          background: '#fff',
-        }}
-      >
-        <h3 style={{ marginBottom: 8 }}>About This Application</h3>
-        <p style={{ color: '#555', lineHeight: 1.6 }}>
-          This application is built using Laravel, Inertia.js, and React. It
-          provides basic accounting features such as chart of accounts,
-          transaction recording with debit and credit validation, filtering,
-          and secure authentication using Laravel Breeze.
-        </p>
-      </div>
-    </div>
-  );
+                        <div className="bg-white p-6 rounded-lg shadow">
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                Transactions
+                            </h2>
+                            <p className="text-sm text-gray-500 mt-2">
+                                Record debit and credit transactions
+                            </p>
+                            <Link
+                                href="/transactions"
+                                className="inline-block mt-4 text-sm font-medium text-indigo-600 hover:underline"
+                            >
+                                Open Transactions →
+                            </Link>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </>
+    );
 }

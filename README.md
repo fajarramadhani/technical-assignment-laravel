@@ -2,176 +2,131 @@
 
 ## 📌 Overview
 
-Finance App adalah aplikasi sederhana untuk manajemen keuangan berbasis web yang dibangun menggunakan **Laravel**, **Inertia.js**, dan **React**. Aplikasi ini menyediakan fitur autentikasi, pengelolaan chart of accounts, serta pencatatan transaksi debit & kredit.
+**Finance App** adalah aplikasi manajemen keuangan berbasis web yang dibangun menggunakan **Laravel**, **Inertia.js**, dan **React**, dengan **MySQL** sebagai database.  
+Aplikasi ini menyediakan fitur autentikasi, pengelolaan *chart of accounts*, serta pencatatan transaksi debit dan kredit.
 
 Project ini dibuat sebagai bagian dari **technical assignment** dan difokuskan pada:
 
-* Clean architecture
-* Secure authentication
-* Konsistensi antara backend & frontend
-* Best practice Laravel
+- Clean & maintainable architecture
+- Secure authentication flow
+- Konsistensi backend & frontend (Laravel + Inertia)
+- Best practice Laravel & Docker environment
 
 ---
 
 ## 🚀 Tech Stack
 
-* **Backend**: Laravel
-* **Frontend**: React (via Inertia.js)
-* **Authentication**: Laravel Breeze
-* **Database**: SQLite
-* **Build Tool**: Vite
+- **Backend**: Laravel
+- **Frontend**: React (Inertia.js)
+- **Authentication**: Laravel Breeze
+- **Database**: MySQL 8
+- **Web Server**: Nginx
+- **Containerization**: Docker & Docker Compose
+- **Build Tool**: Vite
 
 ---
 
 ## ✨ Features
 
 ### Authentication
-
-* Register user
-* Login user
-* Logout
-* Session-based authentication (secure)
+- Register user
+- Login user
+- Logout
+- Session-based authentication (secure)
 
 ### Dashboard
-
-* Welcome message (logged-in user)
-* Navigation ke Accounts & Transactions
-* Logout button
+- Welcome message untuk user yang login
+- Navigasi ke Accounts & Transactions
+- Logout button
 
 ### Chart of Accounts
-
-* Create account
-* Update account
-* Delete account (dengan validasi relasi transaksi)
-* Tampilkan balance akun
+- Create account
+- Update account
+- Delete account (dengan validasi relasi transaksi)
+- Menampilkan daftar akun secara terstruktur
 
 ### Transactions
-
-* Create transaction (Debit / Credit)
-* Validasi: hanya debit atau credit yang boleh diisi
-* Filter transaksi berdasarkan account
-* Relasi transaksi ke account
+- Create transaction (Debit / Credit)
+- Validasi: hanya salah satu (debit atau credit) yang boleh diisi
+- Filter transaksi berdasarkan account
+- Relasi transaksi ke account
 
 ---
 
 ## 📂 Project Structure (Simplified)
-
-```
 app/
 ├── Http/Controllers/
 ├── Models/
 resources/
 ├── js/Pages/
-│   ├── Dashboard.jsx
-│   ├── Accounts/
-│   ├── Transactions/
-│   └── Auth/
+│ ├── Dashboard.jsx
+│ ├── Accounts/
+│ ├── Transactions/
+│ └── Auth/
 routes/
 ├── web.php
 database/
 ├── migrations/
-```
+docker/
+├── nginx/
+│ └── default.conf
+docker-compose.yml
+Dockerfile
 
 ---
 
-## ⚙️ Installation & Setup
+## 🐳 Docker Services
 
-### 1️⃣ Clone Repository
-
-```bash
-git clone <repository-url>
-cd finance-app
-```
-
-### 2️⃣ Install Dependencies
-
-```bash
-composer install
-npm install
-```
-
-### 3️⃣ Environment Setup
-
-Copy file `.env.example` menjadi `.env`
-
-```bash
-cp .env.example .env
-```
-
-Generate app key:
-
-```bash
-php artisan key:generate
-```
-
-### 4️⃣ Database Setup (SQLite)
-
-Buat file database:
-
-```bash
-touch database/database.sqlite
-```
-
-Pastikan `.env` berisi:
-
-```env
-DB_CONNECTION=sqlite
-```
-
-### 5️⃣ Migration
-
-```bash
-php artisan migrate
-```
-
-### 6️⃣ Run Application
-
-```bash
-php artisan serve
-npm run dev
-```
-
-Akses aplikasi di:
-
-```
-http://localhost:8000
-```
+| Service | Description |
+|-------|-------------|
+| app | Laravel application (PHP-FPM) |
+| mysql | MySQL 8 database |
+| nginx | Web server |
 
 ---
+
+## ⚙️ Installation & Setup (Docker)
+
+- Clone Repository
+- git clone <repository-url>
+- cd finance-app
+- cp .env.example .env
+- docker compose up -d --build
+- docker compose exec app php artisan key:generate
+- docker compose exec app php artisan migrate
+- npm install
+- npm run dev
+- Buka aplikasi di browser melalui: http://localhost:8000
+
 
 ## 🔐 Authentication Flow
 
-1. User register melalui `/register`
-2. User otomatis login setelah register
-3. User dapat logout melalui dashboard
-4. User dapat login kembali menggunakan akun yang sama
+- User register melalui /register
+- User otomatis login setelah register
+- User dapat logout melalui dashboard
+- User dapat login kembali menggunakan akun yang sama
 
----
 
 ## 🧪 Testing Checklist
+- Docker containers berjalan dengan baik
+- MySQL berjalan di dalam Docker
+- Register user berhasil
+- Login & logout berhasil
+- Dashboard tampil dengan normal
+- CRUD account berjalan
+- Validasi delete account dengan transaksi
+- Create transaction debit / credit
+- Filter transaksi berdasarkan account
 
-* [ ] Register user berhasil
-* [ ] Login & logout berhasil
-* [ ] CRUD account berjalan
-* [ ] Validasi delete account dengan transaksi
-* [ ] Create transaction debit / credit
-* [ ] Filter transaksi berdasarkan account
-
----
 
 ## 📝 Notes
-
-* File `.env` dan `database.sqlite` **tidak disertakan** dalam repository demi keamanan
-* Project menggunakan konfigurasi default Laravel agar mudah dijalankan di environment lain
-
----
+- File .env tidak disertakan dalam repository demi keamanan
+- Database menggunakan MySQL Docker, bukan SQLite
+- Aplikasi dapat dijalankan dengan satu perintah docker compose up
+- Frontend menggunakan Vite untuk hot-reload selama development
 
 ## 👨‍💻 Author
-
-**Fajar Ramadhani**
-
----
+Muhammad Fajar Ramadhani
 
 ## 📎 License
-
-This project is created for technical assessment purposes.
+This project is created for technical assessment purposes only.
